@@ -32,7 +32,7 @@ for i in dirname:
 	if i.count("_") > 3:
 		e = "_".join(i.split("_", 4)[:4])
 		j = "_".join(i.split("_", 4)[4:])
-		namelist.append(str(end))
+		namelist.append(str(e))
 		almost = "_" + j
 		extra_list.append(str(almost))        # Append the ending onto a new string
 

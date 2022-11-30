@@ -1,16 +1,19 @@
+# Load anaconda and import all relevant modules needed for this script
+
 import os 
 import csv
 import string
 import pandas as pd
 
-# Change directory to directory to check.
+# Changing Directory to RunID List
 
 os.chdir("/data/output/results/")
 
-# Directory list save in object 'name' to iterate through.
-
-
+# Save Directories into a List 
 name = os.listdir()
+
+#Loop to go through List and check they all start with a number, if not then they arent added to the final list.
+
 dirname = []
 
 for n in name:
@@ -18,30 +21,25 @@ for n in name:
 		dirname.append(n)
 
 
-
-print(dirname)
-
-
-
-# Iterate through each directory name, check if the name has been altered or not, ammend the name and save all to new list 'namelist'
+# Iterate through each name in list, count number of "_" in name and split name if more than 3 are counted. 
 
 namelist = []
 extra_list = []
 
 for i in dirname:
 	if i.count("_") > 3:
-		e = "_".join(i.split("_", 4)[:4])
-		j = "_".join(i.split("_", 4)[4:])
-		namelist.append(str(e))
-		almost = "_" + j
-		extra_list.append(str(almost))        # Append the ending onto a new string
+		start = "_".join(i.split("_", 4)[:4])      # Splits and stores the first half of the name for RUN_ID List
+		end = "_".join(i.split("_", 4)[4:])        # Splits and stores the second half od the name for EXTRA List
+		namelist.append(str(start))
+		almost = "_" + end
+		extra_list.append(str(almost))        
 
 	else:
-		namelist.append(str(i))
-		extra_list.append(" ")	       # Append "None" to the new string to maintain the same number 
-#print(namelist)
+		namelist.append(str(i))        # If "_" not > 3, name added straight to RUN_ID List and empty string added to EXTRA List
+		extra_list.append(" ")	       
 
-# Extract Year and See if it is in legacy folder
+# Extract Year from first 2 characters of RUN_ID name and use that to move into the correct directory within the legacy-results directory.
+# True or False statement saved for each RUN_ID on whether the same directory was found in the relevant directory within legacy-results
 
 Legacylist = []
 
@@ -52,8 +50,15 @@ for n in namelist:
 	fullpath = newpath + "/" + n
 	#print(fullpath) 
 	exist = os.path.exists(fullpath)
-	Legacylist.append(exist)
-#print(Legacylist)
+	Legacylist.append(exist)                             
+
+
+# Iterate through each directory name in RUN_ID list. The 8th character is checked to reveal which sequencer directory to look within.
+# Within that it then checks to see if the SampleSheet.csv is there and if so, reads through each line until one line contains "pipe" string.
+# This is then cleaned with all empty strings removed and then the final string is selected as this contains all relevant info.
+# Split at ";" as this separated pipe and panel infor and then each is extracted and saved to a Pipeline List and Panel List.
+
+# This is iterated over Novaseg, Miseq and Nextseq
 
 
 pipe = "pipelineName="
@@ -145,6 +150,8 @@ for n in namelist:
 			PanelList.append("NO SAMPLESHEET")
 
 
+# Remove the pipe and panel prefix from each entry.
+
 List = []
 List2 = []
 
@@ -160,17 +167,7 @@ for entry in PanelList:
 	else:
 		List2.append(entry)
 
-
-
-
-print(namelist)
-print(extra_list)
-print(Legacylist)
-print(List)
-print(List2)
-#print(PipelineList)
-#print(PanelList)
-
+# Convert lists into dataframe and then write to csv.
 
 df= pd.DataFrame(list(zip(namelist, Legacylist, List, List2, extra_list)), columns = ["Run_ID", "In_Legacy", "Pipeline", "Panel", "Extra"])
 df.to_csv("/home/v.ki282548/Wren_Run_ID_List", index = False)

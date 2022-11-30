@@ -30,11 +30,10 @@ extra_list = []
 
 for i in dirname:
 	if i.count("_") > 3:
-		i = i.rsplit("_", 1)
-		start = i[0]
-		end = i[-1]        # Use this again to extract the ending 
-		namelist.append(str(start))
-		almost = "_" + end
+		e = "_".join(i.split("_", 4)[:4])
+		j = "_".join(i.split("_", 4)[4:])
+		namelist.append(str(end))
+		almost = "_" + j
 		extra_list.append(str(almost))        # Append the ending onto a new string
 
 	else:

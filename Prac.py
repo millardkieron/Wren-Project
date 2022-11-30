@@ -67,7 +67,7 @@ PanelList = []
 for n in namelist:
 	sequencer = n[7]
 	if sequencer == "A":
-		seqpath = "/home/kieron/Downloads/Dummy (2)/Dummy/archive/novaseq/" + n + "/SampleSheet.csv"
+		seqpath = "/data/archive/novaseq/" + n + "/SampleSheet.csv"
 		if os.path.exists(seqpath) == True:
 			with open(seqpath) as file:
 				read = csv.reader(file, delimiter=",")
@@ -94,7 +94,7 @@ for n in namelist:
 
 
 	if sequencer == "M":
-		seqpath = "/home/kieron/Downloads/Dummy (2)/Dummy/archive/miseq/" + n + "/SampleSheet.csv"
+		seqpath = "/data/archive/miseq/" + n + "/SampleSheet.csv"
 		if os.path.exists(seqpath) == True:
 			with open(seqpath) as file:
 				read = csv.reader(file, delimiter=",")
@@ -121,7 +121,7 @@ for n in namelist:
 
 
 	if sequencer == "N":
-		seqpath = "/home/kieron/Downloads/Dummy (2)/Dummy/archive/nextseq/" + n + "/SampleSheet.csv"
+		seqpath = "/data/archive/nextseq/" + n + "/SampleSheet.csv"
 		if os.path.exists(seqpath) == True:
 			with open(seqpath) as file:
 				read = csv.reader(file, delimiter=",")
